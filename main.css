@@ -1,87 +1,60 @@
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
   color: black;
-  outline: #FF0000 solid 1px;
-}
+/*  outline: #FF0000 solid 1px;
+*/}
 
 
 body{
 /*	background-color: WhiteSmoke;
 */	font-family: 'Open Sans', sans-serif;
-	font-weight: 300;	
-	transform: "rotate(7deg)";
-	/*color: black;*/
+/*	font-weight: 800;	
+*/	/*color: black;*/
 }
 
-
-
-.platy:hover
-{
-	cursor: pointer;
-}
-
-.blurb{
-	font-family: sans-serif;
-    font-size: .8em;
-    color: white;
-    position: absolute;
-    left: 140px;
-    width: 330px;
-}
-
-.blurb_div{
-	border-radius: 10px;
-	margin: 10px;
-}
-
-.speechbubble{
-    color: #00779C;
-    opacity:0;
-	width :100px;
-	padding: 10px;
-	background: white;
-	position: absolute;
-	border-radius: 5px;
-
-}
-
-.mommy{
-	background-color: white;
-}
-
-.footer{    
-	padding-top: 10px;
-	padding-bottom: 10px;
-	padding-left: 20px;
-	padding-right: 20px;
-	margin-left: 30px;
-	margin-right: 30px;
-    list-style: none;
-    font-size: 1em;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    width:600px;
-}
-
-li.vertline{
-    border-right: 1px solid #FFFFFF;
-    width: 0;
+h1{
+	padding:20px;
 }
 
 a{
-	color:white;
-	text-decoration: none;
+	text-align: left;
 }
 
-a:visited {
-    color: white;
+iframe{
+	/*width: 400px;*/
 }
 
-.link:hover{
-	cursor: pointer;
+plot_div{
+	display: inline-block;
+	min-width: 0px;
+	width:600px;
 }
+
+.btn-default{
+	margin: 5px;
+
+}
+
+.continue{
+    position: relative;
+    top:-50px;
+    left: 1000px;
+}
+
+.container {
+  display: inline-block;
+  flex-direction: column ;
+  justify-content: right;
+  align-items: right;
+  height:100px;
+}
+
+.text{
+	width:400px;
+	padding: 20px;
+	left: 600px;
+	position:relative;
+	top: -300px;
+	font-size: 1.5em;
+}
+

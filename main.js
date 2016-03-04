@@ -1,5 +1,5 @@
 var xmlhttp = new XMLHttpRequest();
-var url = "https://script.google.com/macros/s/AKfycbwrK6hgwI8Yg0HSCGzlT3l9af4YUVLlusQXvfqTC5rtZfOPWis/exec";
+var url = "https://script.google.com/macros/s/AKfycbwrK6hgwI8Yg0HSCGzlT3l9af4YUVLlusQXvfqTC5rtZfOPWis/exec?requestType=getdata";
 
 xmlhttp.onreadystatechange = function() {
    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -11,11 +11,10 @@ xmlhttp.open("GET", url, true);
 xmlhttp.send();
 
 function myFunction(questions) {
-	console.log(questions)
 	// var json_q = JSON.parse(questions);
 	// console.log(json_q);
 
-var page_w = 1280;
+var page_w = 1100;
 var page_w_px = page_w + 'px'
 var main_h = 400;
 var main_w = (page_w*2)+(page_w*questions.length);
@@ -23,7 +22,7 @@ var main_w_px = main_w + 'px'
 var trans_exp = 100;
 var moveleft = '-'+page_w_px;
 
-var page_h = 400;
+var page_h = window.innerHeight;
 var page_h_px = page_h + 'px'
 var main_h = (page_h*2)+(page_h*questions.length);
 var main_h_px = main_h + 'px'
@@ -63,38 +62,52 @@ for (var q_idx = 0; q_idx< questions.questions.length; q_idx++){
 
 	var buttons = [];
 	var i = [];
+	var yesno = "Isn't this interesting..?";
 
 	for (var i = 0; i< options[q_idx].length; i++){
+		
+
 		var correct = questions.questions[q_idx].correct.split(",");
-		console.log(correct);
+
 		var class_str = "C"+correct[i] +" btn btn-default";
 		buttons[i] = d3.select(qid_selector).append("button").text(options[q_idx][i]).attr("class",class_str).attr("id","Q,"+q_idx+",A,"+i)
 		.attr("question",questions.questions[q_idx].text).attr("answer",options[q_idx][i])
 		.on("click",function(){
 //			sendReport(question_text[q_idx],options[q_idx][i]);
+			console.log(this.className[1])
+			 if (this.className[1] == "1"){
+			 	 console.log("well done");				
+			 } else {
+			 	console.log("Not quite...");
+			 }	
+
 			scroll();
 			sendReport(this.id)
+			
 		});
-				console.log(options[q_idx][i])
 
 	}
+			
 
-	page[a_idx] = main.append("div").attr("id",aid).style("min-height", page_h_px).style("min-width", page_w_px).style("position","relative").style("left","0px").style("top","0px").style("display","inline-block");
+	page[a_idx] = main.append("div").attr("class","container").attr("id",aid).style("min-height", page_h_px).style("min-width", page_w_px).style("position","relative").style("left","0px").style("top","0px").style("display","inline-block");
 //	var correct[a_idx] = 1; // NEEDS LOGIC
 //	console.log(questions.questions[q_idx].text);
 
-
 //	aheader[a_idx] = page[a_idx].append("div").text(answer_text[q_idx]);
 	answer_text[a_idx] = d3.select(aid_selector)
-	.append("div").text(questions.questions[q_idx].text)
-	.append("button").text("continue..").attr("class","scroll btn btn-default");
-;
+	.append("h1").text(yesno)
 
 	var plot_div = document.createElement('div');
 
-	plot_div.innerHTML = questions.questions[q_idx].plot;
-	
+	plot_div.innerHTML = questions.questions[q_idx].plot;	
 	document.getElementById(aid).appendChild(plot_div);
+
+	plot_div.className = "plot_div";
+
+
+	var flexdiv = d3.select(aid_selector).append("div").attr("class","container");
+	flexdiv.append("div").text(questions.questions[q_idx].text).attr("class","text")
+	flexdiv.append("button").text("continue..").attr("class","scroll btn btn-default continue");
 
 }
 
@@ -141,38 +154,30 @@ var scroll = function(){
 }
 
 var sendReport = function(id){
-	console.log(id);
+    console.log(id);
 
-	var id_array = id.split(",");
-	var qid = id_array[1];
-	var answer = id_array[3];
-	var questiontext = questions.questions[qid].text;
-	var answertext = questions.questions[qid].options[answer];
-
-	var datajson = 
-	{"answers":[
-		{
-			"qid":qid,
-			"answer":answer,
-			"questiontext":questiontext,
-			"answertext":answertext
-		}
-		]
-	}
+    var id_array = id.split(",");
+    var qid = id_array[1];
+    var answer = id_array[3];
+    var questiontext = questions.questions[qid].text;
+    var answertext = questions.questions[qid].options.split(",")[answer];
 
 
-	// var data = '{"answers":[{"qid":"1","answer":"1","questiontext":"what is your age?","answertext":"the answer"}]}';
-	// var datajson = JSON.parse(data);
+    var xmlhttpagain = new XMLHttpRequest();
+    var urlagain = "https://script.google.com/macros/s/AKfycbwrK6hgwI8Yg0HSCGzlT3l9af4YUVLlusQXvfqTC5rtZfOPWis/exec?requestType=postdata&qid="+qid+"&answer="+answer+"&questiontext="+questiontext+"&answertext="+answertext;
 
-	$.ajax({
-	   type: "POST",
-	   url: "https://script.google.com/macros/s/AKfycbwrK6hgwI8Yg0HSCGzlT3l9af4YUVLlusQXvfqTC5rtZfOPWis/exec",
-	   processData: false,
-	   contentType: 'application/json',
-	   data: JSON.stringify(datajson),
-	   success: function(r) {}
-	});
+    xmlhttpagain.onreadystatechange = function() {
+        if (xmlhttpagain.readyState == 4 && xmlhttpagain.status == 200) {
+            var myArr = JSON.parse(xmlhttpagain.responseText);
+            myFunctionNew(myArr);
+        }
+    };
+    xmlhttpagain.open("GET", urlagain, true);
+    xmlhttpagain.send();
 
+    function myFunctionNew(result) {
+        console.log(result)
+    }
 
 }
 
